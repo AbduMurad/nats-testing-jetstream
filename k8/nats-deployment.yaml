@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nats-server
+  labels:
+    app: nats-server
+spec:
+  selector:
+    matchLabels:
+      app: nats-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nats-server
+    spec:
+      containers:
+      - name: nats-server
+        image: nats-server:latest
+        ports:
+        - containerPort: 4222
+        - containerPort: 8222
+        command: ["/nats-server"]
+        args: ["-m", "8222", "--jetstream"]
+        volumeMounts:
+        - name: jetstream-data
+          mountPath: /data/jetstream
+      volumes:
+      - name: jetstream-data
+        persistentVolumeClaim:
+          claimName: jetstream-data-pvc
