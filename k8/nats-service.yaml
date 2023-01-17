@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats-server
+spec:
+  selector:
+    app: nats-server
+  ports:
+  - name: nats
+    port: 4222
+    targetPort: 4222
+  - name: jetstream
+    port: 8222
+    targetPort: 8222
+  type: ClusterIP
